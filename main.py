@@ -8,7 +8,7 @@ from colorama import init
 
 init(autoreset=True)
 playerAlive = True
-
+#list of enemies
 goblin = {
   "name": "Goblin",
   "health": 30,
