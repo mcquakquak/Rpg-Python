@@ -12,7 +12,7 @@ playerAlive = True
 goblin = {
   "name": "Goblin",
   "health": 30,
-  "attack": 7,
+  "attack": 10,
 }
 
 
@@ -30,12 +30,12 @@ def playerCreation():
     player['class'] = "archer"
     player['max health'] = 120
     player['health'] = player['max health']
-    player['atack'] = 5
+    player['attack'] = 5
 
   else:
     player['class'] = "sword"
     player['max health'] = 90
-    player['atack'] = 10
+    player['attack'] = 10
     player['health'] = player['max health']
 
   return player
@@ -55,7 +55,7 @@ def display_player(player):
 
 
 def display_enemy(enemy):
-  enemy['damage'] = 10
+  enemy['attack'] = 10
   enemy['health'] = 30
   for gob, val in enemy.items():
     print(Fore.RED + gob + ": " + str(val))
@@ -78,7 +78,7 @@ def is_alive(character):
 
 
 def deal_damage(enemy):
-  enemy['health'] -= player['atack']
+  enemy['health'] -= player['attack']
   print(Fore.RED + "enemy health: " + enemy['health'])
   '''
   Have the player and enemy attack each other once
@@ -89,11 +89,11 @@ def deal_damage(enemy):
 
 
 def player_attack(enemy):
-  if input("Do you want to atack Yes(1) No(2)") == 2:
+  if input("Do you want to attack Yes(1) No(2)") == 2:
     player['health'] -= enemy['attack']
     print(Fore.GREEN + player['health'])
   else:
-    enemy['health'] -= player['atack']
+    enemy['health'] -= player['attack']
     print(Fore.GREEN + "player health: " + str(player['health']))
     print(Fore.RED + "enemy health: " + str(enemy['health']))
   '''
@@ -104,7 +104,7 @@ def player_attack(enemy):
 
 
 def enemy_attack(enemy):
-  player['health'] -= enemy['damage']
+  player['health'] -= enemy['attack']
   '''
   Have the enemy attack the player one time
   This should affect the player's health
@@ -125,7 +125,7 @@ def level_up():
     player['xpToLevel'] += 1
     player['level'] += 1
     player['xp'] = 0
-    player['atack'] += 1
+    player['attack'] += 1
     player['max health'] += 3
     player['health'] == player['max health']
   '''
@@ -142,6 +142,12 @@ def town():
   '''
 
 
+def attackerAnnoucer(attacker, victim):
+  #     <attacker> attacked <victim> and stole <damage> of their <victims health> health
+  print(attacker['name'] + " attacked " + victim['name'] + " and stole " +
+        str(attacker['attack']) + " of their " + str(victim['health']) + "health")
+
+
 #Fight Loop
 def fight(player):
   global playerAlive
@@ -149,8 +155,10 @@ def fight(player):
   display_enemy(enemy)
   while is_alive(player) and is_alive(enemy):
     player_attack(enemy)
+    attackerAnnoucer(player, enemy)
     if is_alive(enemy):
       enemy_attack(enemy)
+      attackerAnnoucer(enemy, player)
   if not is_alive(enemy):
     enemy_defeated()
     level_up()
@@ -177,6 +185,6 @@ while playerAlive:
     print(Fore.LIGHTBLUE_EX + "You went to town and regained your health")
     town()
   else:
-    print("Invalid Choice.")
+    player['level'] = -69420
 
 print("Your adventure has ended.")
